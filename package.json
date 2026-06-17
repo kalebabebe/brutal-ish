@@ -78,6 +78,11 @@
 	  "type": "font",
 	  "name": "FONT7",
 	  "file": "font7.bdf"
+	},
+	{
+	  "type": "font",
+	  "name": "FONT11",
+	  "file": "font11.bdf"
 	}
       ]
     }
