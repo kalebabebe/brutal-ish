@@ -6,7 +6,7 @@
 	#define IF_EMERY_ELSE(if_true, if_false) (if_false)
 #endif
 
-#define CONFKEY		4	/* bumped: ignore config saved by earlier versions */
+#define CONFKEY		5	/* bumped: ignore config saved by earlier versions */
 #define CHRONOGRAPHKEY	2
 #define WEATHERKEY	3
 #define MARGIN		5
@@ -1283,7 +1283,7 @@ main(void)
 	conf.padh = false;
 	conf.shadow = 16;
 	conf.seconds = 0;
-	conf.tempunit = 'C';
+	conf.tempunit = 'F';
 	persist_read_data(CONFKEY, &conf, sizeof conf);
 	persist_read_data(WEATHERKEY, &weather, sizeof weather);
 	configure();

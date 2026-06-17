@@ -189,7 +189,7 @@ new Clay([
       {
         "type": "select",
         "messageKey": "TEMPUNIT",
-        "defaultValue": "C",
+        "defaultValue": "F",
         "label": "Temperature unit",
         "options": [
           { "value": "C", "label": "Celcius" },
