@@ -82,10 +82,11 @@ new Clay([
         "id": "bottom-select",
         "type": "select",
         "label": "Presets",
-        "defaultValue": "&t&u&i,%a %d",
+        "defaultValue": "&t&u&i,%a %d %b",
         "options": [
-          { "value": "",              "label": "NOTHING" },
-          { "value": "&t&u&i,%a %d",  "label": "DEFAULT: Weather, Mon 18" },
+          { "value": "",                 "label": "NOTHING" },
+          { "value": "&t&u&i,%a %d %b",  "label": "DEFAULT: Weather, Mon 18 Nov" },
+          { "value": "&t&u&i,%a %d",     "label": "Weather, Mon 18" },
           { "value": "%A %d",         "label": "Monday 18" },
           { "value": "%p",            "label": "AM/PM" },
           { "value": "%a %d",         "label": "Sun 18" },
@@ -103,7 +104,7 @@ new Clay([
         "id": "bottom-input",
         "type": "input",
         "messageKey": "BOTTOM",
-        "defaultValue": "&t&u&i,%A %d"
+        "defaultValue": "&t&u&i,%a %d %b"
       }
     ]
   },
@@ -118,10 +119,10 @@ new Clay([
         "id": "side-select",
         "type": "select",
         "label": "Presets",
-        "defaultValue": "%B %Y,*w*q#b%%*b*c",
+        "defaultValue": "",
         "options": [
-          { "value": "",                   "label": "NOTHING" },
-          { "value": "%B %Y,*w*q#b%%*b*c", "label": "DEFAULT: November 2024, battery and status icons" },
+          { "value": "",                   "label": "DEFAULT: NOTHING" },
+          { "value": "%B %Y,*w*q#b%%*b*c", "label": "November 2024, battery and status icons" },
           { "value": "%p",                 "label": "AM/PM" },
           { "value": "%A %d",              "label": "Monday 18" },
           { "value": "%a %d",              "label": "Sun 18" },
@@ -140,7 +141,7 @@ new Clay([
         "id": "side-input",
         "type": "input",
         "messageKey": "SIDE",
-        "defaultValue": "%B %Y,*w*q#b%%*b*c"
+        "defaultValue": ""
       },
     ]
   },

@@ -6,7 +6,7 @@
 	#define IF_EMERY_ELSE(if_true, if_false) (if_false)
 #endif
 
-#define CONFKEY		1
+#define CONFKEY		4	/* bumped: ignore config saved by earlier versions */
 #define CHRONOGRAPHKEY	2
 #define WEATHERKEY	3
 #define MARGIN		5
@@ -1201,16 +1201,20 @@ onquickview(AnimationProgress _progress, void *_ctx)
 
 	bounds = layer_get_unobstructed_bounds(layout.body);
 
+	/* NOTE: these keep FONT10H on purpose. The hour "shrink" animation in
+	 * onhour() keys off the minute layer's Y against a baseline of
+	 * MARGIN+DIGITSH+SPACING; this formula must reproduce that baseline
+	 * exactly (== onwinload) or the big hour collapses to the small text. */
 	frame = layer_get_frame(layout.minute);
-	frame.origin.y = bounds.size.h - MARGIN - FONT11H - DIGITSH - SPACING + LETTERSPACING;
+	frame.origin.y = bounds.size.h - MARGIN - FONT10H - DIGITSH - SPACING + LETTERSPACING;
 	layer_set_frame(layout.minute, frame);
 
 	frame = layer_get_frame(layout.bottom);
-	frame.origin.y = bounds.size.h - MARGIN - FONT11H;
+	frame.origin.y = bounds.size.h - MARGIN - FONT10H;
 	layer_set_frame(layout.bottom, frame);
 
 	frame = layer_get_frame(layout.side);
-	frame.size.h = bounds.size.h - MARGIN*2 - FONT11H - 1;	/* TODO(irek): Magic number */
+	frame.size.h = bounds.size.h - MARGIN*2 - FONT10H - 1;	/* TODO(irek): Magic number */
 	layer_set_frame(layout.side, frame);
 
 	layer_mark_dirty(layout.hour);
