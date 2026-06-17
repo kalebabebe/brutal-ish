@@ -16,64 +16,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # The Pebble SDK only runs on Python 2.7, so the build itself happens
-      # inside an old python:2.7.18-buster container. Checkout / artifact
-      # upload run on the modern host to avoid Node-in-old-container issues.
+      # Build inside dmorgan81/rebble:4.3 — an Ubuntu 18.04 image with the
+      # Pebble SDK 4.3 + pebble-tool preinstalled and configured (no fragile
+      # SDK downloads). The image entrypoint is `pebble`, so the args below
+      # run `pebble build` with the repo mounted at /work. fixuid in the
+      # image maps file ownership to the host runner user.
       - name: Build watchface (.pbw)
         run: |
-          docker run --rm -v "$PWD":/project -w /project python:2.7.18-buster bash -c '
-            set -euo pipefail
-
-            # Debian Buster is end-of-life; its packages now live on the archive.
-            echo "deb http://archive.debian.org/debian buster main contrib non-free" > /etc/apt/sources.list
-            apt-get -o Acquire::Check-Valid-Until=false update
-            apt-get -qq install -y --no-install-recommends \
-              wget ca-certificates python-pip python2.7-dev \
-              libsdl1.2debian libfdt1 libpixman-1-0 \
-              nodejs npm libfreetype6 libx11-6 rlwrap
-
-            pip install virtualenv
-
-            # Download a file from the first mirror that returns a real bzip2
-            # archive (start byte "BZ"), with retries. Avoids the old
-            # "pipe wget into tar" trap where an HTML error page silently
-            # corrupts the extraction.
-            fetch_bz2() {
-              out="$1"; shift
-              for url in "$@"; do
-                echo ">> trying $url"
-                if wget --tries=3 --timeout=90 -O "$out" "$url" \
-                   && [ "$(head -c2 "$out")" = "BZ" ]; then
-                  echo ">> ok: $url"
-                  return 0
-                fi
-                echo ">> failed (got: $(head -c120 "$out" | tr -d "\0"))"
-              done
-              echo "!! all mirrors failed for $out"; return 1
-            }
-
-            # Pebble Tool / SDK 4.5
-            mkdir -p sdk
-            fetch_bz2 /tmp/pebble-sdk.tar.bz2 \
-              "https://rebble-sdk.s3-us-west-2.amazonaws.com/pebble-sdk-4.5-linux64.tar.bz2" \
-              "https://developer.rebble.io/s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-4.5-linux64.tar.bz2" \
-              "https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-4.5-linux64.tar.bz2"
-            tar xjf /tmp/pebble-sdk.tar.bz2 --strip-components=1 -C sdk
-            ( cd sdk && virtualenv .env && bash -c "source .env/bin/activate && pip install -r requirements.txt && deactivate" )
-
-            # SDK core (firmware headers / libs for each platform)
-            mkdir -p ~/.pebble-sdk && touch ~/.pebble-sdk/NO_TRACKING
-            fetch_bz2 sdk/sdk-core-4.3.tar.bz2 \
-              "https://github.com/aveao/PebbleArchive/raw/master/SDKCores/sdk-core-4.3.tar.bz2" \
-              "https://raw.githubusercontent.com/aveao/PebbleArchive/master/SDKCores/sdk-core-4.3.tar.bz2"
-            yes | sdk/bin/pebble sdk install sdk/sdk-core-4.3.tar.bz2
-
-            # JS config-page dependency (pebble-clay)
-            npm install || true
-
-            # Build all target platforms
-            yes | sdk/bin/pebble build
-          '
+          docker run --rm \
+            -u "$(id -u):$(id -g)" \
+            -v "$PWD":/work \
+            dmorgan81/rebble:4.3 build
 
       - name: Upload PBW
         uses: actions/upload-artifact@v4
