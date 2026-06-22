@@ -209,7 +209,7 @@ new Clay([
         "type": "toggle",
         "messageKey": "PADH",
         "label": "Avoid drawing leading 0 in hours",
-        "defaultValue": false
+        "defaultValue": true
       },
       {
         "type": "slider",

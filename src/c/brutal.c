@@ -6,7 +6,7 @@
 	#define IF_EMERY_ELSE(if_true, if_false) (if_false)
 #endif
 
-#define CONFKEY		5	/* bumped: ignore config saved by earlier versions */
+#define CONFKEY		6	/* bumped: ignore config saved by earlier versions */
 #define CHRONOGRAPHKEY	2
 #define WEATHERKEY	3
 #define MARGIN		5
@@ -17,8 +17,8 @@
 #define FONT7H		7
 #define FONT10W		8
 #define FONT10H		10
-#define FONT11W		9	/* bottom row: font10 scaled ~1px bigger */
-#define FONT11H		11
+#define FONT11W		9	/* bottom row: font10 scaled taller (same width) */
+#define FONT11H		12
 #define LETTERSPACING	2
 #define WEATHERINTERVAL (30*60)
 #define DIVIDER		0x7F
@@ -1280,7 +1280,7 @@ main(void)
 	conf.bton = VIBE_SILENT;
 	conf.btoff = VIBE_SILENT;
 	conf.onhour = VIBE_SILENT;
-	conf.padh = false;
+	conf.padh = true;	/* drop leading zero on the hour (09 -> 9) */
 	conf.shadow = 16;
 	conf.seconds = 0;
 	conf.tempunit = 'F';
