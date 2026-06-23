@@ -17,16 +17,16 @@
 #define FONT7H		7
 #define FONT10W		8
 #define FONT10H		10
-#define FONT11W		9	/* bottom row: font10 scaled taller (same width) */
-#define FONT11H		12
+#define FONT12W		9	/* bottom row: font10 scaled taller (same width) */
+#define FONT12H		12
 #define LETTERSPACING	2
 #define WEATHERINTERVAL (30*60)
 #define DIVIDER		0x7F
 #define NA		INT16_MAX	/* not available */
 
 #ifdef PBL_RECT
-	#define SIDEMAX ((PBL_DISPLAY_HEIGHT - MARGIN*2 - FONT11H - SPACING + LETTERSPACING*2) / FONT7H)
-	#define BOTTOMMAX ((PBL_DISPLAY_WIDTH - MARGIN*2 + LETTERSPACING) / FONT11W)
+	#define SIDEMAX ((PBL_DISPLAY_HEIGHT - MARGIN*2 - FONT12H - SPACING + LETTERSPACING*2) / FONT7H)
+	#define BOTTOMMAX ((PBL_DISPLAY_WIDTH - MARGIN*2 + LETTERSPACING) / FONT12W)
 #else
 	#define SIDEMAX		17
 	#define BOTTOMMAX	17
@@ -159,7 +159,7 @@ static struct {
 	GDrawCommandImage*	digits;
 	GFont	font10;
 	GFont	font7;
-	GFont	font11;
+	GFont	font12;
 } asset;
 
 static struct {
@@ -776,12 +776,12 @@ onwinload(Window *win)
 	rect.origin.x = MARGIN;
 	rect.origin.y += SPACING + DIGITSH - LETTERSPACING;
 	rect.size.w = PBL_DISPLAY_WIDTH - MARGIN*2 + LETTERSPACING;
-	rect.size.h = FONT11H;
+	rect.size.h = FONT12H;
 #else
 	rect.origin.x = 0;
 	rect.origin.y = 60 + DIGITSH + 5;
 	rect.size.w = PBL_DISPLAY_WIDTH;
-	rect.size.h = FONT11H;
+	rect.size.h = FONT12H;
 #endif
 
 	layout.bottom = layer_create(rect);
@@ -792,7 +792,7 @@ onwinload(Window *win)
 	rect.origin.x = MARGIN;
 	rect.origin.y = MARGIN - LETTERSPACING;
 	rect.size.w = FONT7W;
-	rect.size.h = PBL_DISPLAY_HEIGHT - MARGIN*2 - SPACING - FONT11H + LETTERSPACING*2;
+	rect.size.h = PBL_DISPLAY_HEIGHT - MARGIN*2 - SPACING - FONT12H + LETTERSPACING*2;
 #else
 	rect.origin.x = 0;
 	rect.origin.y = 60 + DIGITSH + 5*3 + 8;
@@ -980,12 +980,12 @@ onbottom(Layer *layer, GContext *ctx)
 #ifdef PBL_RECT
 	spread(buf, BOTTOMMAX);
 
-	graphics_draw_text(ctx, buf, asset.font11, bounds,
+	graphics_draw_text(ctx, buf, asset.font12, bounds,
 			   GTextOverflowModeWordWrap,
 			   GTextAlignmentRight, NULL);
 #else
 	buf[BOTTOMMAX] = 0;
-	graphics_draw_text(ctx, buf, asset.font11, bounds,
+	graphics_draw_text(ctx, buf, asset.font12, bounds,
 			   GTextOverflowModeWordWrap,
 			   GTextAlignmentCenter, NULL);
 #endif
@@ -1261,7 +1261,7 @@ main(void)
 	asset.digits = gdraw_command_image_create_with_resource(RESOURCE_ID_DIGITS);
 	asset.font10 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT10));
 	asset.font7 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT7));
-	asset.font11 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT11));
+	asset.font12 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT12));
 
 	/* window */
 	win = window_create();
@@ -1325,7 +1325,7 @@ main(void)
 	gdraw_command_image_destroy(asset.digits);
 	fonts_unload_custom_font(asset.font10);
 	fonts_unload_custom_font(asset.font7);
-	fonts_unload_custom_font(asset.font11);
+	fonts_unload_custom_font(asset.font12);
 
 	return 0;
 }
